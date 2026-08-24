@@ -1,6 +1,16 @@
 import React from 'react';
 import {AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 
+/** Cada video tiñe el fondo con su color de marca. */
+const ACCENTS = {
+  blue: {glow: '0,158,227', strength: 0.24},
+  violet: {glow: '139,92,246', strength: 0.2},
+} as const;
+
+type BackdropProps = {
+  readonly accent?: keyof typeof ACCENTS;
+};
+
 /**
  * Fondo continuo del video completo.
  *
@@ -8,7 +18,7 @@ import {AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig} from 'remoti
  * frame global (0 → 449). Al no cortarse nunca, encadena las tres escenas y
  * hace que los cambios se lean como transiciones y no como cortes secos.
  */
-export const Backdrop: React.FC = () => {
+export const Backdrop: React.FC<BackdropProps> = ({accent = 'blue'}) => {
   const frame = useCurrentFrame();
   const {durationInFrames} = useVideoConfig();
 
@@ -18,12 +28,14 @@ export const Backdrop: React.FC = () => {
   const glowX = interpolate(progress, [0, 0.5, 1], [32, 52, 66]);
   const glowY = interpolate(progress, [0, 0.5, 1], [26, 44, 32]);
 
+  const {glow, strength} = ACCENTS[accent];
+
   return (
-    <AbsoluteFill className="bg-mp-ink">
-      {/* Halo azul Mercado Pago que se desplaza lentamente. */}
+    <AbsoluteFill className="bg-ui-ink">
+      {/* Halo de marca que se desplaza lentamente. */}
       <AbsoluteFill
         style={{
-          background: `radial-gradient(58% 58% at ${glowX}% ${glowY}%, rgba(0,158,227,0.24) 0%, rgba(0,158,227,0.06) 45%, rgba(5,7,13,0) 72%)`,
+          background: `radial-gradient(58% 58% at ${glowX}% ${glowY}%, rgba(${glow},${strength}) 0%, rgba(${glow},0.06) 45%, rgba(5,7,13,0) 72%)`,
         }}
       />
 

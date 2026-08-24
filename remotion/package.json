@@ -2,13 +2,14 @@
   "name": "multiplicar-webhook-video",
   "version": "1.0.0",
   "private": true,
-  "description": "Video de documentación técnica (15s) del webhook de Mercado Pago, hecho con Remotion + TailwindCSS",
+  "description": "Videos de documentaci\u00f3n t\u00e9cnica (Remotion + TailwindCSS)",
   "type": "module",
   "scripts": {
     "dev": "remotion studio",
     "studio": "remotion studio",
-    "render": "remotion render MercadoPagoWebhook out/mercadopago-webhook.mp4",
-    "still": "remotion still MercadoPagoWebhook out/frame.png --frame=150",
+    "voz": "node scripts/generate-voiceover.mjs",
+    "render:kafka": "remotion render KafkaIntro out/kafka-que-es.mp4",
+    "render:mercadopago": "remotion render MercadoPagoWebhook out/mercadopago-webhook.mp4",
     "typecheck": "tsc --noEmit",
     "upgrade": "remotion upgrade"
   },
@@ -24,6 +25,7 @@
   "devDependencies": {
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
-    "typescript": "^5.9.0"
+    "typescript": "^5.9.0",
+    "mespeak": "^2.0.2"
   }
 }

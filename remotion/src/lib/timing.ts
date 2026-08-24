@@ -1,5 +1,5 @@
 /**
- * Fuente única de verdad para la línea de tiempo del video.
+ * Helpers de línea de tiempo compartidos por todos los videos.
  *
  * Buena práctica de Remotion: nunca hardcodear frames sueltos en los
  * componentes. Se declara todo en SEGUNDOS y se convierte con el `fps` real
@@ -11,16 +11,8 @@ export const FPS = 30;
 export const VIDEO_WIDTH = 1920;
 export const VIDEO_HEIGHT = 1080;
 
-/** Duración total exigida por el brief: 15 segundos exactos. */
-export const TOTAL_DURATION_IN_SECONDS = 15;
-
 export const secondsToFrames = (seconds: number, fps: number): number =>
   Math.round(seconds * fps);
-
-export const DURATION_IN_FRAMES = secondsToFrames(
-  TOTAL_DURATION_IN_SECONDS,
-  FPS,
-); // 450 frames @ 30fps
 
 export type SceneWindow = {
   /** Segundo en el que entra la escena. */
@@ -29,12 +21,8 @@ export type SceneWindow = {
   readonly to: number;
 };
 
-/** Ventanas de cada escena, en segundos, tal cual el guion. */
-export const SCENES = {
-  title: {from: 0, to: 3},
-  terminal: {from: 3, to: 11},
-  outro: {from: 11, to: 15},
-} as const satisfies Record<string, SceneWindow>;
+/** Cada video declara sus propias ventanas con este shape. */
+export type SceneWindows = Record<string, SceneWindow>;
 
 /** Duración del cross-fade entre escenas. */
 export const CROSS_FADE_IN_SECONDS = 0.5;
@@ -59,10 +47,10 @@ export type SceneTiming = {
  * extiende `exitInSeconds` MÁS ALLÁ de su ventana. La escena entrante ya
  * arrancó en su segundo exacto, así que ambas conviven durante ese tramo y
  * el corte se lee como un fundido encadenado — sin mover los tiempos del
- * guion (0-3s / 3-11s / 11-15s).
+ * guion.
  *
  * En la última escena no hay nada con qué encadenar, así que el fundido se
- * mete hacia adentro para que quepa dentro de los 15s.
+ * mete hacia adentro para que quepa dentro de la duración total.
  */
 export const getSceneTiming = (
   scene: SceneWindow,

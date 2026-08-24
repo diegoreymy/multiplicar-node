@@ -1,5 +1,5 @@
 import React from 'react';
-import {SANS_FONT_FAMILY} from '../lib/fonts';
+import {SANS_FONT_FAMILY} from '../../lib/fonts';
 
 type TerminalWindowProps = {
   readonly title: string;
@@ -26,7 +26,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
 }) => {
   return (
     <div
-      className="w-[1180px] overflow-hidden rounded-2xl border border-mp-line bg-mp-panel/95"
+      className="w-[1180px] overflow-hidden rounded-2xl border border-ui-line bg-ui-panel/95"
       style={{
         transform: `scale(${0.94 + 0.06 * openProgress})`,
         opacity: openProgress,
@@ -34,7 +34,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
           '0 60px 120px -30px rgba(0,0,0,0.85), 0 0 0 1px rgba(0,158,227,0.14), 0 0 90px -40px rgba(0,158,227,0.55)',
       }}
     >
-      <div className="flex items-center gap-4 border-b border-mp-line bg-mp-ink-soft/90 px-6 py-4">
+      <div className="flex items-center gap-4 border-b border-ui-line bg-ui-ink-soft/90 px-6 py-4">
         <div className="flex gap-2.5">
           {TRAFFIC_LIGHTS.map((light, index) => (
             <span
@@ -45,7 +45,7 @@ export const TerminalWindow: React.FC<TerminalWindowProps> = ({
         </div>
 
         <span
-          className="flex-1 text-center text-[19px] font-semibold tracking-wide text-mp-slate"
+          className="flex-1 text-center text-[19px] font-semibold tracking-wide text-ui-slate"
           style={{fontFamily: SANS_FONT_FAMILY}}
         >
           {title}

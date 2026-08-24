@@ -1,9 +1,9 @@
 import React from 'react';
 import {AbsoluteFill, Easing, interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
-import {CheckIcon} from '../components/CheckIcon';
-import {SceneTransition} from '../components/SceneTransition';
-import {MONO_FONT_FAMILY, SANS_FONT_FAMILY} from '../lib/fonts';
-import {CROSS_FADE_IN_SECONDS, secondsToFrames, type SceneTiming} from '../lib/timing';
+import {CheckIcon} from '../../components/CheckIcon';
+import {SceneTransition} from '../../components/SceneTransition';
+import {MONO_FONT_FAMILY, SANS_FONT_FAMILY} from '../../lib/fonts';
+import {CROSS_FADE_IN_SECONDS, secondsToFrames, type SceneTiming} from '../../lib/timing';
 
 type OutroSceneProps = {
   readonly message: string;
@@ -70,7 +70,7 @@ export const OutroScene: React.FC<OutroSceneProps> = ({
         </div>
 
         <h2
-          className="max-w-[1300px] text-center text-[76px] font-extrabold leading-tight tracking-tight text-mp-cloud"
+          className="max-w-[1300px] text-center text-[76px] font-extrabold leading-tight tracking-tight text-ui-cloud"
           style={{
             fontFamily: SANS_FONT_FAMILY,
             opacity: messageOpacity,
@@ -81,7 +81,7 @@ export const OutroScene: React.FC<OutroSceneProps> = ({
         </h2>
 
         <p
-          className="text-[26px] uppercase tracking-[0.34em] text-mp-slate"
+          className="text-[26px] uppercase tracking-[0.34em] text-ui-slate"
           style={{fontFamily: MONO_FONT_FAMILY, opacity: footnoteOpacity}}
         >
           {footnote}

@@ -1,17 +1,32 @@
 import React from 'react';
 import {AbsoluteFill, Sequence, useVideoConfig} from 'remotion';
-import {Backdrop} from './components/Backdrop';
-import {DEFAULT_PAYLOAD_LINES, type TerminalLine} from './lib/payload';
+import {Backdrop} from '../components/Backdrop';
 import {
   CROSS_FADE_IN_SECONDS,
   FINAL_FADE_IN_SECONDS,
+  FPS,
   getSceneTiming,
-  SCENES,
   secondsToFrames,
-} from './lib/timing';
+  type SceneWindows,
+} from '../lib/timing';
+import {DEFAULT_PAYLOAD_LINES, type TerminalLine} from './payload';
 import {OutroScene} from './scenes/OutroScene';
 import {TerminalScene} from './scenes/TerminalScene';
 import {TitleScene} from './scenes/TitleScene';
+
+/** Duración total exigida por el brief: 15 segundos exactos. */
+export const TOTAL_DURATION_IN_SECONDS = 15;
+export const DURATION_IN_FRAMES = secondsToFrames(
+  TOTAL_DURATION_IN_SECONDS,
+  FPS,
+); // 450 frames @ 30fps
+
+/** Ventanas de cada escena, en segundos, tal cual el guion. */
+export const SCENES = {
+  title: {from: 0, to: 3},
+  terminal: {from: 3, to: 11},
+  outro: {from: 11, to: 15},
+} as const satisfies SceneWindows;
 
 export type MercadoPagoWebhookVideoProps = {
   readonly title: string;
@@ -73,7 +88,7 @@ export const MercadoPagoWebhookVideo: React.FC<
   const premount = secondsToFrames(0.5, fps);
 
   return (
-    <AbsoluteFill className="bg-mp-ink">
+    <AbsoluteFill className="bg-ui-ink">
       <Backdrop />
 
       <Sequence name="01 · Título" {...titleTiming.sequence}>

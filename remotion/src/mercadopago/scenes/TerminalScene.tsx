@@ -1,11 +1,11 @@
 import React from 'react';
 import {AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
-import {SceneTransition} from '../components/SceneTransition';
+import {SceneTransition} from '../../components/SceneTransition';
 import {TerminalWindow} from '../components/TerminalWindow';
 import {TypewriterCode} from '../components/TypewriterCode';
-import {MONO_FONT_FAMILY} from '../lib/fonts';
-import type {TerminalLine} from '../lib/payload';
-import type {SceneTiming} from '../lib/timing';
+import {MONO_FONT_FAMILY} from '../../lib/fonts';
+import type {TerminalLine} from '../payload';
+import type {SceneTiming} from '../../lib/timing';
 
 type TerminalSceneProps = {
   readonly lines: TerminalLine[];
@@ -72,13 +72,13 @@ export const TerminalScene: React.FC<TerminalSceneProps> = ({
           />
 
           <div
-            className="mt-7 flex items-center gap-4 border-t border-mp-line pt-6"
+            className="mt-7 flex items-center gap-4 border-t border-ui-line pt-6"
             style={{opacity: statusOpacity, fontFamily: MONO_FONT_FAMILY}}
           >
-            <span className="rounded-md bg-mp-mint/15 px-4 py-2 text-[22px] font-bold uppercase tracking-widest text-mp-mint">
+            <span className="rounded-md bg-ui-mint/15 px-4 py-2 text-[22px] font-bold uppercase tracking-widest text-ui-mint">
               status: approved
             </span>
-            <span className="text-[22px] text-mp-slate">
+            <span className="text-[22px] text-ui-slate">
               webhook procesado · 200 OK
             </span>
           </div>

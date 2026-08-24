@@ -1,8 +1,8 @@
 import React, {useMemo} from 'react';
 import {interpolate, useCurrentFrame} from 'remotion';
-import {MONO_FONT_FAMILY} from '../lib/fonts';
-import {TOKEN_CLASS_NAMES, type TerminalLine} from '../lib/payload';
-import {sliceTokens, tokenizeJson, type Token} from '../lib/tokenize';
+import {MONO_FONT_FAMILY} from '../../lib/fonts';
+import {TOKEN_CLASS_NAMES, type TerminalLine} from '../payload';
+import {sliceTokens, tokenizeJson, type Token} from '../tokenize';
 
 type TypewriterCodeProps = {
   readonly lines: TerminalLine[];
@@ -92,7 +92,7 @@ export const TypewriterCode: React.FC<TypewriterCodeProps> = ({
         return (
           <div key={index} className="flex h-[44px] items-center">
             {line.kind === 'prompt' && charsForLine > 0 ? (
-              <span className="mr-3 text-mp-mint">$</span>
+              <span className="mr-3 text-ui-mint">$</span>
             ) : null}
 
             {visibleTokens.map((token, tokenIndex) => (

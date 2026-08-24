@@ -1,23 +1,28 @@
 @import "tailwindcss";
 
 /**
- * Tokens de diseño del video.
+ * Tokens de diseño compartidos por los videos del proyecto.
  * Se declaran con @theme (Tailwind v4) para poder usarlos como clases
- * estáticas: bg-mp-blue, text-mp-mint, border-mp-line, font-mono-code, etc.
+ * estáticas: bg-mp-blue, text-ui-mint, border-ui-line, font-mono-code, etc.
  *
  * Buena práctica: los colores/tipografías son ESTÁTICOS (Tailwind los detecta
  * en build). Todo lo que cambia frame a frame va en `style` inline.
  */
 @theme {
-  --color-mp-ink: #05070d;
-  --color-mp-ink-soft: #0b1020;
-  --color-mp-panel: #0f1626;
-  --color-mp-line: #1e2a44;
+  --color-ui-ink: #05070d;
+  --color-ui-ink-soft: #0b1020;
+  --color-ui-panel: #0f1626;
+  --color-ui-line: #1e2a44;
   --color-mp-blue: #009ee3;
   --color-mp-blue-soft: #4fc3f7;
-  --color-mp-mint: #34d399;
-  --color-mp-amber: #fbbf24;
-  --color-mp-violet: #a78bfa;
-  --color-mp-slate: #64748b;
-  --color-mp-cloud: #e8eefc;
+  --color-ui-mint: #34d399;
+  --color-ui-amber: #fbbf24;
+  --color-ui-violet: #a78bfa;
+  --color-ui-slate: #64748b;
+  --color-ui-cloud: #e8eefc;
+
+  /* Acentos por video: mp-* para Mercado Pago, kf-* para Kafka. */
+  --color-kf-violet: #8b5cf6;
+  --color-kf-violet-soft: #c4b5fd;
+  --color-kf-rose: #fb7185;
 }

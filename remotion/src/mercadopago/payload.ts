@@ -34,11 +34,11 @@ export const DEFAULT_PAYLOAD_LINES: TerminalLine[] = [
 /** Clases de Tailwind por tipo de token (estáticas, nunca interpoladas). */
 export const TOKEN_CLASS_NAMES: Record<TokenKind, string> = {
   key: 'text-mp-blue-soft',
-  string: 'text-mp-mint/80',
-  number: 'text-mp-amber',
-  literal: 'text-mp-violet',
-  punctuation: 'text-mp-slate',
-  prompt: 'text-mp-cloud',
-  comment: 'text-mp-slate',
-  highlight: 'text-mp-mint font-bold',
+  string: 'text-ui-mint/80',
+  number: 'text-ui-amber',
+  literal: 'text-ui-violet',
+  punctuation: 'text-ui-slate',
+  prompt: 'text-ui-cloud',
+  comment: 'text-ui-slate',
+  highlight: 'text-ui-mint font-bold',
 };

@@ -1,8 +1,8 @@
 import React from 'react';
 import {AbsoluteFill, Easing, interpolate, spring, useVideoConfig, useCurrentFrame} from 'remotion';
-import {SceneTransition} from '../components/SceneTransition';
-import {MONO_FONT_FAMILY, SANS_FONT_FAMILY} from '../lib/fonts';
-import type {SceneTiming} from '../lib/timing';
+import {SceneTransition} from '../../components/SceneTransition';
+import {MONO_FONT_FAMILY, SANS_FONT_FAMILY} from '../../lib/fonts';
+import type {SceneTiming} from '../../lib/timing';
 
 type TitleSceneProps = {
   readonly title: string;
@@ -57,17 +57,17 @@ export const TitleScene: React.FC<TitleSceneProps> = ({
       <AbsoluteFill className="items-center justify-center px-40">
         <div className="flex w-full max-w-[1440px] flex-col items-start gap-8">
           <div
-            className="flex items-center gap-4 rounded-full border border-mp-line bg-mp-ink-soft/70 px-6 py-3"
+            className="flex items-center gap-4 rounded-full border border-ui-line bg-ui-ink-soft/70 px-6 py-3"
             style={{opacity: eyebrowOpacity, fontFamily: MONO_FONT_FAMILY}}
           >
-            <span className="h-3 w-3 rounded-full bg-mp-mint" />
+            <span className="h-3 w-3 rounded-full bg-ui-mint" />
             <span className="text-[22px] font-bold uppercase tracking-[0.32em] text-mp-blue-soft">
               {eyebrow}
             </span>
           </div>
 
           <h1
-            className="text-[104px] font-extrabold leading-[1.06] tracking-tight text-mp-cloud"
+            className="text-[104px] font-extrabold leading-[1.06] tracking-tight text-ui-cloud"
             style={{
               fontFamily: SANS_FONT_FAMILY,
               opacity: titleSpring,
@@ -86,7 +86,7 @@ export const TitleScene: React.FC<TitleSceneProps> = ({
           />
 
           <p
-            className="max-w-[1080px] text-[30px] leading-relaxed text-mp-slate"
+            className="max-w-[1080px] text-[30px] leading-relaxed text-ui-slate"
             style={{fontFamily: SANS_FONT_FAMILY, opacity: subtitleOpacity}}
           >
             Notificación IPN recibida, validada y confirmada por la API de pagos.
