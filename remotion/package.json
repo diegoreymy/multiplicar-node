@@ -1,0 +1,29 @@
+{
+  "name": "multiplicar-webhook-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Video de documentación técnica (15s) del webhook de Mercado Pago, hecho con Remotion + TailwindCSS",
+  "type": "module",
+  "scripts": {
+    "dev": "remotion studio",
+    "studio": "remotion studio",
+    "render": "remotion render MercadoPagoWebhook out/mercadopago-webhook.mp4",
+    "still": "remotion still MercadoPagoWebhook out/frame.png --frame=150",
+    "typecheck": "tsc --noEmit",
+    "upgrade": "remotion upgrade"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.516",
+    "@remotion/cli": "4.0.516",
+    "@remotion/google-fonts": "4.0.516",
+    "@remotion/tailwind-v4": "4.0.516",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "remotion": "4.0.516"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "typescript": "^5.9.0"
+  }
+}

@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+/**
+ * Tokens de diseño del video.
+ * Se declaran con @theme (Tailwind v4) para poder usarlos como clases
+ * estáticas: bg-mp-blue, text-mp-mint, border-mp-line, font-mono-code, etc.
+ *
+ * Buena práctica: los colores/tipografías son ESTÁTICOS (Tailwind los detecta
+ * en build). Todo lo que cambia frame a frame va en `style` inline.
+ */
+@theme {
+  --color-mp-ink: #05070d;
+  --color-mp-ink-soft: #0b1020;
+  --color-mp-panel: #0f1626;
+  --color-mp-line: #1e2a44;
+  --color-mp-blue: #009ee3;
+  --color-mp-blue-soft: #4fc3f7;
+  --color-mp-mint: #34d399;
+  --color-mp-amber: #fbbf24;
+  --color-mp-violet: #a78bfa;
+  --color-mp-slate: #64748b;
+  --color-mp-cloud: #e8eefc;
+}
