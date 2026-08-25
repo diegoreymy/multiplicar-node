@@ -1,15 +1,17 @@
 /**
  * Genera los archivos de voz de la narración a partir de src/kafka/narration.json.
  *
- *   node scripts/generate-voiceover.mjs                   # eSpeak offline (voz guía)
+ *   node scripts/generate-voiceover.mjs                   # Piper neuronal, offline (default)
+ *   node scripts/generate-voiceover.mjs --provider=espeak      # robótico, sin descargas
  *   node scripts/generate-voiceover.mjs --provider=elevenlabs
  *   node scripts/generate-voiceover.mjs --provider=openai
+ *   node scripts/generate-voiceover.mjs --speed=0.95           # sólo Piper: <1 más lento (default 0.85)
  *
  * Escribe public/voz/kafka/<id>.mp3 y avisa si alguna locución no entra en su
  * ventana del guion — que es lo único que puede desincronizar el video.
  */
 import {execFileSync, spawnSync} from 'node:child_process';
-import {mkdirSync, readFileSync, rmSync, writeFileSync} from 'node:fs';
+import {existsSync, mkdirSync, readFileSync, rmSync, writeFileSync} from 'node:fs';
 import {createRequire} from 'node:module';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -24,7 +26,8 @@ const arg = (name, fallback) => {
   return found ? found.split('=')[1] : fallback;
 };
 
-const provider = arg('provider', 'espeak');
+const provider = arg('provider', 'piper');
+const speed = Number(arg('speed', '0.85'));
 const segments = JSON.parse(
   readFileSync(join(ROOT, 'src', 'kafka', 'narration.json'), 'utf-8'),
 );
@@ -48,6 +51,80 @@ const probeDurationInSeconds = (path) => {
   const match = /Duration: (\d+):(\d+):([\d.]+)/.exec(`${stdout}${stderr}`);
   if (!match) return null;
   return Number(match[1]) * 3600 + Number(match[2]) * 60 + Number(match[3]);
+};
+
+/* ----------------------------------------------------------------- Piper -- */
+
+/**
+ * Voz neuronal (VITS) en español rioplatense, corriendo 100% local.
+ *
+ * El modelo son ~110 MB, así que no se versiona: se baja una sola vez a
+ * node_modules/.tts-models (ya ignorado por git) y de ahí en adelante el
+ * script funciona sin red.
+ *
+ * OJO: VITS usa un predictor de duración estocástico, así que dos corridas
+ * sobre el mismo texto dan audios ~5% más largos o más cortos. Por eso el
+ * guion deja aire en cada ventana y por eso este script valida siempre: si
+ * una locución quedara al borde, fallaría una de cada tantas corridas.
+ */
+const PIPER_VOICE = {
+  id: 'vits-piper-es_AR-daniela-high',
+  model: 'es_AR-daniela-high.onnx',
+  url: 'https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/vits-piper-es_AR-daniela-high.tar.bz2',
+};
+
+const MODELS_DIR = join(ROOT, 'node_modules', '.tts-models');
+
+const ensurePiperVoice = () => {
+  const voiceDir = join(MODELS_DIR, PIPER_VOICE.id);
+  if (existsSync(join(voiceDir, PIPER_VOICE.model))) {
+    return voiceDir;
+  }
+
+  console.log(`Descargando la voz ${PIPER_VOICE.id} (~110 MB, una sola vez)...`);
+  mkdirSync(MODELS_DIR, {recursive: true});
+
+  const tarball = join(MODELS_DIR, `${PIPER_VOICE.id}.tar.bz2`);
+  execFileSync('curl', ['-sSL', '--fail', '-o', tarball, PIPER_VOICE.url], {
+    stdio: 'inherit',
+  });
+  execFileSync('tar', ['xjf', tarball, '-C', MODELS_DIR], {stdio: 'inherit'});
+  rmSync(tarball, {force: true});
+
+  return voiceDir;
+};
+
+let piper = null;
+const speakWithPiper = (text) => {
+  if (!piper) {
+    const voiceDir = ensurePiperVoice();
+    const sherpa = require('sherpa-onnx-node');
+    piper = {
+      sherpa,
+      tts: new sherpa.OfflineTts({
+        model: {
+          vits: {
+            model: join(voiceDir, PIPER_VOICE.model),
+            tokens: join(voiceDir, 'tokens.txt'),
+            dataDir: join(voiceDir, 'espeak-ng-data'),
+          },
+          numThreads: 2,
+          debug: false,
+        },
+        maxNumSentences: 1,
+      }),
+    };
+  }
+
+  const audio = piper.tts.generate({text, sid: 0, speed});
+
+  // sherpa escribe WAV a disco; se lee de vuelta para unificar el flujo.
+  const wavPath = join(TMP_DIR, 'piper.wav');
+  piper.sherpa.writeWave(wavPath, {
+    samples: audio.samples,
+    sampleRate: audio.sampleRate,
+  });
+  return readFileSync(wavPath);
 };
 
 /* ---------------------------------------------------------------- eSpeak -- */
@@ -132,15 +209,21 @@ const main = async () => {
   for (const segment of segments) {
     const outputPath = join(OUT_DIR, `${segment.id}.mp3`);
 
-    if (provider === 'espeak') {
-      // eSpeak devuelve WAV, así que hay un paso de conversión.
+    if (provider === 'piper' || provider === 'espeak') {
+      // Los motores locales devuelven WAV: hay un paso de conversión.
+      const speak = provider === 'piper' ? speakWithPiper : speakWithEspeak;
       const wavPath = join(TMP_DIR, `${segment.id}.wav`);
-      writeFileSync(wavPath, speakWithEspeak(segment.text));
+      writeFileSync(wavPath, speak(segment.text));
       toMp3(wavPath, outputPath);
-    } else {
+    } else if (provider === 'elevenlabs' || provider === 'openai') {
       const speak =
         provider === 'elevenlabs' ? speakWithElevenLabs : speakWithOpenAi;
       writeFileSync(outputPath, await speak(segment.text));
+    } else {
+      throw new Error(
+        `Proveedor desconocido: "${provider}". ` +
+          `Usá piper, espeak, elevenlabs u openai.`,
+      );
     }
 
     const duration = probeDurationInSeconds(outputPath);

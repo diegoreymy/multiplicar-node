@@ -4,7 +4,7 @@ Videos hechos con [Remotion](https://remotion.dev) + TailwindCSS v4, 1920×1080 
 
 | Composición | Duración | Tema |
 | --- | --- | --- |
-| `KafkaIntro` | 60s | ¿Qué es Apache Kafka? — **con voz en off y subtítulos** |
+| `KafkaIntro` | 60s | ¿Qué es Apache Kafka? — **con voz en off neuronal y subtítulos** |
 | `MercadoPagoWebhook` | 15s | Flujo del webhook de Mercado Pago (pago aprobado) |
 
 ## Cómo verlos
@@ -34,26 +34,42 @@ de ahí salen los archivos de audio, los `<Audio>` de la composición y los
 subtítulos en pantalla. Si cambiás una línea ahí, se actualizan las tres cosas.
 
 ```bash
-npm run voz                              # eSpeak offline (voz guía, sin claves)
+npm run voz                              # Piper neuronal, offline (default)
+npm run voz -- --speed=0.8               # más lento (default 0.85)
+npm run voz -- --provider=espeak         # robótico, sin descargas
 npm run voz -- --provider=elevenlabs     # necesita ELEVENLABS_API_KEY
 npm run voz -- --provider=openai         # necesita OPENAI_API_KEY
 ```
+
+### Piper (el default)
+
+Voz neuronal **es_AR** (`daniela`, high) corriendo 100% local con
+`sherpa-onnx-node`: sin claves de API, sin mandar el guion a ningún servidor.
+La primera corrida baja el modelo (~110 MB) a `node_modules/.tts-models`, que
+ya está fuera de git; después funciona sin red.
+
+El **ritmo se ajusta con `--speed`** (menor = más lento). El default de 0.85
+es un ritmo de documental; si te suena apurado o arrastrado, movelo y volvé a
+generar — es el parámetro que conviene calibrar de oído.
+
+> VITS usa un predictor de duración estocástico: dos corridas sobre el mismo
+> texto dan audios ~5% más largos o más cortos. Por eso el guion deja aire en
+> cada ventana en vez de llenarla al ras.
+
+### La validación
 
 El script escribe `public/voz/kafka/<id>.mp3` y **valida que cada locución
 entre en su ventana del guion**, que es lo único que puede desincronizar el
 video. Si alguna se pasa, falla y dice cuál:
 
 ```
-✓ 03-solucion    9.61s / 10.20s disponibles
+✓ 03-solucion    8.25s / 10.20s disponibles
 ✗ 04-anatomia   12.43s / 12.20s disponibles
 ```
 
-> Los mp3 versionados los generó eSpeak: sirven como **voz guía** para validar
-> tiempos, pero suenan robóticos. Para la versión final regenerá con
-> ElevenLabs u OpenAI —o grabá la voz vos— y pisá los archivos: como cada
-> locución está anclada a su segundo, no hay que retocar ningún tiempo.
-> Ojo con los textos si cambiás de proveedor: una voz más lenta puede no
-> entrar en la ventana, y por eso el script valida.
+Esto importa al cambiar de proveedor o de velocidad: una voz más lenta puede
+no entrar, y el guion está escrito para llenar ~80% de cada ventana con la
+configuración por defecto.
 
 ## Estructura
 
@@ -108,7 +124,8 @@ scripts/
   allá de su ventana para encadenarse con la siguiente; la entrante igual
   arranca en su segundo exacto.
 - **Un `<Audio>` por locución, no un mp3 largo.** Cada pista queda anclada a su
-  segundo: regenerar una línea suelta no desincroniza al resto.
+  segundo: regenerar una línea suelta —o cambiar de voz— no desincroniza al
+  resto.
 - **`premountFor`** en las escenas pesadas: se montan antes de entrar, así el
   primer frame visible no tiene flicker.
 - **Tailwind para lo estático, `style` para lo animado.** Tailwind no puede

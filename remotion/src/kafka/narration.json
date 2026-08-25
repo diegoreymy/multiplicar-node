@@ -3,36 +3,36 @@
     "id": "01-intro",
     "startInSeconds": 0.6,
     "endInSeconds": 5.6,
-    "text": "¿Qué es Apache Kafka? Te lo explico en un minuto."
+    "text": "¿Qué es Apache Kafka? Te lo explico en un minuto, sin vueltas."
   },
   {
     "id": "02-problema",
     "startInSeconds": 6.3,
     "endInSeconds": 16.8,
-    "text": "Cuando los servicios se hablan entre sí, cada integración nueva multiplica las conexiones. Y si uno se cae, arrastra al resto."
+    "text": "Cuando los servicios se hablan entre sí, cada integración nueva multiplica las conexiones. Con seis servicios ya son quince. Y si uno se cae, arrastra al resto."
   },
   {
     "id": "03-solucion",
     "startInSeconds": 17.4,
     "endInSeconds": 27.6,
-    "text": "Kafka se pone en el medio. Los productores publican eventos, los consumidores los leen, y ninguno necesita conocer al otro."
+    "text": "Kafka se pone en el medio. Los productores publican eventos, los consumidores los leen, y ninguno necesita conocer al otro: cada uno habla sólo con Kafka."
   },
   {
     "id": "04-anatomia",
     "startInSeconds": 28.3,
     "endInSeconds": 41.0,
-    "text": "Los eventos van a un topic, dividido en particiones. Cada partición es un log: sólo se escribe al final, y cada evento recibe su número de orden, el offset."
+    "text": "Los eventos van a un topic, dividido en particiones. Cada partición es un log: sólo se escribe al final, nunca en el medio. Y cada evento recibe su número de orden: el offset."
   },
   {
     "id": "05-consumo",
     "startInSeconds": 41.4,
     "endInSeconds": 51.6,
-    "text": "Leer no borra. Cada grupo de consumidores lleva su propio offset y avanza a su ritmo: el mismo evento alimenta a varios sistemas."
+    "text": "Leer no borra. Cada grupo de consumidores lleva su propio offset y avanza a su ritmo, así que el mismo evento alimenta a varios sistemas sin estorbarse."
   },
   {
     "id": "06-cierre",
     "startInSeconds": 52.4,
     "endInSeconds": 59.4,
-    "text": "Un log distribuido, ordenado y durable. Eso es Kafka."
+    "text": "Un log distribuido, ordenado y durable. Eso es Kafka, y por eso escala tan bien."
   }
 ]
