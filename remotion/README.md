@@ -73,9 +73,14 @@ configuración por defecto.
 
 ## Agregar otro video
 
-`PROMPT-nuevo-video.md` es la plantilla de prompt que encapsula esta
-metodología: reemplazás el tema, la duración y las escenas, y sale un video
-nuevo con las mismas reglas de tiempo, animación, voz y verificación.
+`PROMPT-video-documentacion.md` es un prompt **autocontenido** que encapsula
+esta metodología. Se pega entero en una sesión nueva de Claude Code, en un
+directorio vacío y sin acceso a este repo: incluye el andamiaje completo
+(config, `lib/`, `components/`, el generador de voz), las reglas de tiempo,
+animación, estilos y voz, y la checklist de verificación.
+
+Para agregar un video *acá dentro*, sirve igual: saltate la sección 3, que es
+el andamiaje que este repo ya tiene.
 
 ## Estructura
 
