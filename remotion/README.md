@@ -71,6 +71,12 @@ Esto importa al cambiar de proveedor o de velocidad: una voz más lenta puede
 no entrar, y el guion está escrito para llenar ~80% de cada ventana con la
 configuración por defecto.
 
+## Agregar otro video
+
+`PROMPT-nuevo-video.md` es la plantilla de prompt que encapsula esta
+metodología: reemplazás el tema, la duración y las escenas, y sale un video
+nuevo con las mismas reglas de tiempo, animación, voz y verificación.
+
 ## Estructura
 
 ```
